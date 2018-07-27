@@ -2,9 +2,9 @@
 
 const Bookmark = (function () {
 
-  function validateName(name) {
-    if (!name) {
-      throw new TypeError('Name does not exist');
+  function validateTitle(title) {
+    if (!title) {
+      throw new TypeError('Title does not exist');
     }
   }
 
@@ -20,7 +20,7 @@ const Bookmark = (function () {
   }
 
   return {
-    validateName,
+    validateTitle,
     create
   };
 

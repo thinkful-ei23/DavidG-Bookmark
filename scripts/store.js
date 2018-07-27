@@ -1,26 +1,20 @@
+
 'use strict';
 
-const store = (function(){
-
-  let bookmarks = [];
-
-  const findById = function() {
+const store = (function () {
     
+  const findById = function(id) {
+    return store.bookmarks.find(bookmark => bookmark.id === id);
   };
 
-  const addBookmark = function(){
-
+  const addBookmark = function(bookmark) {
+    this.bookmarks.push(bookmark);
   };
 
-  const findAndDelete = function(){
-
+  const findAndDelete = function(id) {
+    let foundBookmark = this.findById(id);
+    this.bookmarks = store.bookmarks.filter(bookmark => bookmark !== foundBookmark);
   };
 
-  const toggleRatingFilter = function(){
-
-  };
-
-  return {bookmarks, findById, addBookmark, findAndDelete, toggleRatingFilter};
-
-
-}());
+  return {bookmarks:[], findById, addBookmark, findAndDelete};
+}() );
