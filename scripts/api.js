@@ -1,6 +1,6 @@
 /* global $ */
 'use strict';
-
+// eslint-disable-next-line
 const api =(function() {
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/davidg';
 

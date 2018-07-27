@@ -1,6 +1,6 @@
 /* global $, store, api */
 'use strict';
-
+// eslint-disable-next-line
 const bookmarkers = (function() {
 
   function serialize(form) {
