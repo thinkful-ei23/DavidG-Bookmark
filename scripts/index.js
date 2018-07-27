@@ -1,12 +1,11 @@
+/* global $, store, api, bookmarkers*/
 'use strict';
-/* global bookmarkView, $, api, store */
 
-
-$(document).ready(function(){
-  bookmarkView.js.bindEventListeners();
-  api.getBookmarks(bookmarks => {
-    bookmarks.forEach(bookmark => store.addBookmark(bookmark));
-    bookmarkView.render();
+$(document).ready(function() {
+  bookmarkers.binderList();
+  api.getBookmark(response => {
+    response.forEach(item => {
+      store.addBookmark(item);});
+    bookmarkers.render();
   });
-
 });

@@ -1,42 +1,40 @@
-/* global $*/
+/* global $ */
 'use strict';
 
-const api = (function(){
-
+const api =(function() {
   const BASE_URL = 'https://thinkful-list-api.herokuapp.com/davidg';
 
-  const getBookmarks = function(callback){
-    $.getJSON(`${BASE_URL}/bookmarks`, callback);
+  const getBookmark = function(callback){
+    $.getJSON(BASE_URL + '/bookmarks', callback);
   };
 
-  const creatBookmark = function(bookmark, callback){
-    let newBookmark = JSON.stringify(bookmark);
+  const createBookmark = function(object, callback, error) {
+    let newItem = JSON.stringify(object);
     $.ajax({
-      url : `${BASE_URL}/bookmarks`,
+      url : BASE_URL + '/bookmarks',
       method : 'POST',
       contentType : 'application/json',
-      data : bookmark,
-      success : callback
+      data : newItem,
+      success : callback,
+      error : error
     });
   };
 
-  function deleteBookmark(id, callback){
+  const deleteBookmark = function(id, callback, error) {
     $.ajax({
-      url : `${BASE_URL}/bookmarks/${id}`,
+      url : BASE_URL + '/bookmarks/' + id,
       method : 'DELETE',
       contentType : 'application/json',
-      data : 'json',
-      success : callback
+      success : callback,
+      error : error
     });
-  }
-
-
-  return {
-    getBookmarks,
-    creatBookmark,
-    deleteBookmark
   };
 
+  const throwError = function(message) {
+    let errorMessage = JSON.parse(message.responseText).message;
+    console.log('Error is ' + errorMessage);
+    alert(errorMessage);
+  };
 
-
-});
+  return {getBookmark, createBookmark, deleteBookmark, throwError};
+}() );
