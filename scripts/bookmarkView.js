@@ -3,20 +3,28 @@
 
 // eslint-disable-next-line no-unused-vars
 const bookmarkList = (function(){
+  $.fn.extend({
+    serializeJson: function() {
+      const formData = new FormData(this[0]);
+      const o = {};
+      formData.forEach((val, title) => o[title] = val);
+      return JSON.stringify(o);
+    }
+  });
 
-  function generateBookmarkElement(item) {
-    let itemTitle = `<span class="shopping-item shopping-item__checked">${item.name}</span>`;
-    if (!item.checked) {
-      itemTitle = `
+  function generateBookmarkElement(bookmark) {
+    let bookmarkTitle = `<span class="bookmark bookmark__checked">${bookmark.tite}</span>`;
+    if (!bookmark.checked) {
+      bookmarkTitle = `
         <form class="js-edit-item">
-          <input class="shopping-item type="text" value="${item.name}" />
+          <input class="shopping-item type="text" value="${bookmark.title}" />
         </form>
       `;
     }
   
     return `
-      <li class="js-item-element" data-item-id="${item.id}">
-        ${itemTitle}
+      <li class="js-item-element" data-item-id="${bookmark.id}">
+        ${bookmarkTitle}
         <div class="shopping-item-controls">
           <button class="shopping-item-toggle js-item-toggle">
             <span class="button-label">check</span>
@@ -30,38 +38,33 @@ const bookmarkList = (function(){
   
   
   function generateBookmarkString(shoppingList) {
-    const items = shoppingList.map((item) => generateBookmarkElement(item));
-    return items.join('');
+    const bookmarks = bookmarkList.map((bookmark) => generateBookmarkElement(bookmark));
+    return bookmarks.join('');
   }
   
   
   function render() {
     // Filter item list if store prop is true by item.checked === false
-    let items = store.items;
-    if (store.hideCheckedItems) {
-      items = store.items.filter(item => !item.checked);
-    }
-  
-    // Filter item list if store prop `searchTerm` is not empty
-    if (store.searchTerm) {
-      items = store.items.filter(item => item.name.includes(store.searchTerm));
-    }
+    let bookmarks = store.items;
+    // if (store.hideCheckedItems) {
+    //   items = store.items.filter(item => !item.checked);
+    // }
   
     // render the shopping list in the DOM
     console.log('`render` ran');
-    const shoppingListItemsString = generateBookmarkString(items);
+    const bookmarksString = generateBookmarkString(bookmarks);
   
     // insert that HTML into the DOM
-    $('.js-shopping-list').html(shoppingListItemsString);
+    $('.js-shopping-list').html(bookmarksString);
   }
   
   
-  function handleNewItemSubmit() {
+  function handleNewBookmarkSubmit() {
     $('#js-shopping-list-form').submit(function (event) {
       event.preventDefault();
-      const newItemName = $('.js-shopping-list-entry').val();
+      const newBookmarkTitle = $('.js-shopping-list-entry').val();
       $('.js-shopping-list-entry').val('');
-      store.addItem(newItemName);
+      store.addItem(newBookmarkTitle);
       render();
     });
   }
@@ -72,11 +75,11 @@ const bookmarkList = (function(){
       .data('item-id');
   }
   
-  function handleDeleteItemClicked() {
+  function handleDeleteBookmarkClicked() {
     // like in `handleItemCheckClicked`, we use event delegation
     $('.js-shopping-list').on('click', '.js-item-delete', event => {
       // get the index of the item in store.items
-      const id = getItemIdFromElement(event.currentTarget);
+      const id = getBookmarkIdFromElement(event.currentTarget);
       // delete the item
       store.findAndDelete(id);
       // render the updated shopping list
@@ -85,8 +88,8 @@ const bookmarkList = (function(){
   }
   
   function bindEventListeners() {
-    handleNewItemSubmit();
-    handleDeleteItemClicked();
+    handleNewBookmarkSubmit();
+    handleDeleteBookmarkClicked();
   }
 
   // This object contains the only exposed methods from this module:
